@@ -1,5 +1,5 @@
 {
-  "name": "motor-tech-back-end",
+  "name": "motor-tech-backend",
   "private": true,
   "version": "0.1.0",
   "description": "A Strapi application",
@@ -9,18 +9,18 @@
     "build": "strapi build",
     "strapi": "strapi"
   },
+  "devDependencies": {},
   "dependencies": {
-    "@strapi/plugin-i18n": "4.15.0",
-    "@strapi/plugin-users-permissions": "4.15.0",
     "@strapi/strapi": "4.15.0",
-    "better-sqlite3": "8.6.0",
-    "strapi-plugin-io": "^1.1.4"
+    "@strapi/plugin-users-permissions": "4.15.0",
+    "@strapi/plugin-i18n": "4.15.0",
+    "better-sqlite3": "8.6.0"
   },
   "author": {
     "name": "A Strapi developer"
   },
   "strapi": {
-    "uuid": "7f3190e7-6fcc-4e12-a685-5a6036ca17cf"
+    "uuid": "b52d4d3c-e1b3-4866-a31b-a00f688314e6"
   },
   "engines": {
     "node": ">=18.0.0 <=20.x.x",
