@@ -1,0 +1,5 @@
+{
+  "POST /chat/send": "chat.send",
+  "GET /chats": "chat.find",
+  "GET /chats/:id": "chat.findOne"
+}
