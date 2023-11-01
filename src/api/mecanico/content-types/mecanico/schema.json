@@ -1,0 +1,40 @@
+{
+  "kind": "collectionType",
+  "collectionName": "mecanicos",
+  "info": {
+    "singularName": "mecanico",
+    "pluralName": "mecanicos",
+    "displayName": "Mecanico",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "NameMecanico": {
+      "type": "string",
+      "required": true,
+      "unique": true,
+      "maxLength": 150,
+      "minLength": 1
+    },
+    "UIDunico": {
+      "type": "uid",
+      "targetField": "NameMecanico",
+      "required": true
+    },
+    "EmailMecanico": {
+      "type": "email",
+      "required": true,
+      "minLength": 1,
+      "maxLength": 150
+    },
+    "Especialidad": {
+      "type": "text",
+      "required": true,
+      "maxLength": 1000,
+      "minLength": 1
+    }
+  }
+}
