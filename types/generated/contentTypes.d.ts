@@ -367,34 +367,42 @@ export interface ApiMecanicoMecanico extends Schema.CollectionType {
   info: {
     singularName: 'mecanico';
     pluralName: 'mecanicos';
-    displayName: 'Mecanico';
+    displayName: 'mec\u00E1nico';
     description: '';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
-    NameMecanico: Attribute.String &
-      Attribute.Required &
-      Attribute.Unique &
-      Attribute.SetMinMaxLength<{
-        minLength: 1;
-        maxLength: 150;
-      }>;
-    UIDunico: Attribute.UID<'api::mecanico.mecanico', 'NameMecanico'> &
-      Attribute.Required;
-    EmailMecanico: Attribute.Email &
+    Id_mecanico: Attribute.UID & Attribute.Required;
+    Email_mecanico: Attribute.Email;
+    Nombre: Attribute.Text &
       Attribute.Required &
       Attribute.SetMinMaxLength<{
-        minLength: 1;
-        maxLength: 150;
+        maxLength: 20;
       }>;
-    Especialidad: Attribute.Text &
+    users_permissions_users: Attribute.Relation<
+      'api::mecanico.mecanico',
+      'oneToMany',
+      'plugin::users-permissions.user'
+    >;
+    InformeEntrada: Attribute.Text &
       Attribute.Required &
       Attribute.SetMinMaxLength<{
         minLength: 1;
-        maxLength: 1000;
+        maxLength: 2000;
       }>;
+    InformeSalida: Attribute.Text &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 1;
+        maxLength: 2000;
+      }>;
+    vehiculos: Attribute.Relation<
+      'api::mecanico.mecanico',
+      'oneToMany',
+      'api::vehiculo.vehiculo'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -406,6 +414,100 @@ export interface ApiMecanicoMecanico extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::mecanico.mecanico',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiReviewReview extends Schema.CollectionType {
+  collectionName: 'reviews';
+  info: {
+    singularName: 'review';
+    pluralName: 'reviews';
+    displayName: 'Review';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    Comentario: Attribute.Text &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 1;
+        maxLength: 1500;
+      }>;
+    Puntuacion: Attribute.Integer &
+      Attribute.Required &
+      Attribute.SetMinMax<{
+        min: 1;
+        max: 10;
+      }>;
+    Id_mecanico: Attribute.UID;
+    Id_usuario: Attribute.UID;
+    users_permissions_user: Attribute.Relation<
+      'api::review.review',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::review.review',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::review.review',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiVehiculoVehiculo extends Schema.CollectionType {
+  collectionName: 'vehiculos';
+  info: {
+    singularName: 'vehiculo';
+    pluralName: 'vehiculos';
+    displayName: 'Veh\u00EDculo';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    Id_vehiculo: Attribute.UID & Attribute.Required;
+    Marca: Attribute.String;
+    Modelo: Attribute.String;
+    Id_usuario: Attribute.UID;
+    Numero_placa: Attribute.Integer;
+    mecanico: Attribute.Relation<
+      'api::vehiculo.vehiculo',
+      'oneToOne',
+      'api::mecanico.mecanico'
+    >;
+    users_permissions_user: Attribute.Relation<
+      'api::vehiculo.vehiculo',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::vehiculo.vehiculo',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::vehiculo.vehiculo',
       'oneToOne',
       'admin::user'
     > &
@@ -533,6 +635,50 @@ export interface PluginUploadFolder extends Schema.CollectionType {
   };
 }
 
+export interface PluginI18NLocale extends Schema.CollectionType {
+  collectionName: 'i18n_locale';
+  info: {
+    singularName: 'locale';
+    pluralName: 'locales';
+    collectionName: 'locales';
+    displayName: 'Locale';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+    'content-type-builder': {
+      visible: false;
+    };
+  };
+  attributes: {
+    name: Attribute.String &
+      Attribute.SetMinMax<{
+        min: 1;
+        max: 50;
+      }>;
+    code: Attribute.String & Attribute.Unique;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'plugin::i18n.locale',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'plugin::i18n.locale',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface PluginUsersPermissionsPermission
   extends Schema.CollectionType {
   collectionName: 'up_permissions';
@@ -638,7 +784,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
   options: {
     draftAndPublish: false;
-    timestamps: true;
   };
   attributes: {
     username: Attribute.String &
@@ -667,6 +812,21 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'manyToOne',
       'plugin::users-permissions.role'
     >;
+    vehiculos: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::vehiculo.vehiculo'
+    >;
+    mecanico: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToOne',
+      'api::mecanico.mecanico'
+    >;
+    reviews: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::review.review'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -677,50 +837,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'plugin::users-permissions.user',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface PluginI18NLocale extends Schema.CollectionType {
-  collectionName: 'i18n_locale';
-  info: {
-    singularName: 'locale';
-    pluralName: 'locales';
-    collectionName: 'locales';
-    displayName: 'Locale';
-    description: '';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  pluginOptions: {
-    'content-manager': {
-      visible: false;
-    };
-    'content-type-builder': {
-      visible: false;
-    };
-  };
-  attributes: {
-    name: Attribute.String &
-      Attribute.SetMinMax<{
-        min: 1;
-        max: 50;
-      }>;
-    code: Attribute.String & Attribute.Unique;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'plugin::i18n.locale',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'plugin::i18n.locale',
       'oneToOne',
       'admin::user'
     > &
@@ -739,12 +855,14 @@ declare module '@strapi/types' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'api::mecanico.mecanico': ApiMecanicoMecanico;
+      'api::review.review': ApiReviewReview;
+      'api::vehiculo.vehiculo': ApiVehiculoVehiculo;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
+      'plugin::i18n.locale': PluginI18NLocale;
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
-      'plugin::i18n.locale': PluginI18NLocale;
     }
   }
 }

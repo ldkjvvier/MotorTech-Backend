@@ -4,7 +4,7 @@
   "info": {
     "singularName": "mecanico",
     "pluralName": "mecanicos",
-    "displayName": "Mecanico",
+    "displayName": "mecánico",
     "description": ""
   },
   "options": {
@@ -12,29 +12,39 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "NameMecanico": {
-      "type": "string",
-      "required": true,
-      "unique": true,
-      "maxLength": 150,
-      "minLength": 1
-    },
-    "UIDunico": {
+    "Id_mecanico": {
       "type": "uid",
-      "targetField": "NameMecanico",
       "required": true
     },
-    "EmailMecanico": {
-      "type": "email",
-      "required": true,
-      "minLength": 1,
-      "maxLength": 150
+    "Email_mecanico": {
+      "type": "email"
     },
-    "Especialidad": {
+    "Nombre": {
       "type": "text",
       "required": true,
-      "maxLength": 1000,
+      "maxLength": 20
+    },
+    "users_permissions_users": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::users-permissions.user"
+    },
+    "InformeEntrada": {
+      "type": "text",
+      "required": true,
+      "maxLength": 2000,
       "minLength": 1
+    },
+    "InformeSalida": {
+      "type": "text",
+      "required": true,
+      "maxLength": 2000,
+      "minLength": 1
+    },
+    "vehiculos": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::vehiculo.vehiculo"
     }
   }
 }
