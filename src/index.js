@@ -20,11 +20,15 @@ module.exports = {
     const users = {}; // Agregamos la declaración de la variable users aquí
 
     io.on("connection", (socket) => {
-      // Manejo de eventos
-      handleJoinRoom(socket);
-      handleChat(socket);
-      handleDisconnect(socket);
-      handleGetUsers(socket);
+      try {
+        // Manejo de eventos
+        handleJoinRoom(socket);
+        handleChat(socket);
+        handleDisconnect(socket);
+        handleGetUsers(socket);
+      } catch (error) {
+        console.error("Error al conectar con el socket:", error);
+      }
     });
 
     async function handleJoinRoom(socket) {
@@ -86,7 +90,7 @@ module.exports = {
             })
               .then((response) => response.json())
               .then((data) => {
-                // Envia el mensaje a todos los usuarios de la sala
+                console.log(data);
                 sendMessage(io, user, message);
               })
               .catch((error) => {
@@ -133,7 +137,8 @@ module.exports = {
       const entry = await strapi.query("api::message.message").findOne({
         room: roomname,
       });
-      return !!entry;
+
+      if (entry.room == roomname) return true;
     }
 
     function getCurrentUser(id) {
