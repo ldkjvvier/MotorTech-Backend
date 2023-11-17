@@ -15,12 +15,14 @@
     "user": {
       "type": "string"
     },
-    "room": {
-      "type": "text",
-      "required": true
-    },
     "message": {
       "type": "richtext"
+    },
+    "room": {
+      "type": "string",
+      "required": true,
+      "maxLength": 10,
+      "minLength": 1
     }
   }
 }

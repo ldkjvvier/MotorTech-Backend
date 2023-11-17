@@ -682,6 +682,20 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
         maxLength: 20;
       }> &
       Attribute.DefaultTo<'undefined'>;
+    direccion: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 5;
+        maxLength: 20;
+      }>;
+    nacimiento: Attribute.Date & Attribute.Required;
+    genero: Attribute.String & Attribute.Required;
+    telefono: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 8;
+        maxLength: 9;
+      }>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -771,8 +785,13 @@ export interface ApiMessageMessage extends Schema.CollectionType {
   };
   attributes: {
     user: Attribute.String;
-    room: Attribute.Text & Attribute.Required;
     message: Attribute.RichText;
+    room: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 1;
+        maxLength: 10;
+      }>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

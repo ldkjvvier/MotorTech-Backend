@@ -17,7 +17,7 @@ module.exports = {
       },
     });
 
-    const users = {}; // Agregamos la declaración de la variable users aquí
+    const users = {};
 
     io.on("connection", (socket) => {
       try {
@@ -31,26 +31,23 @@ module.exports = {
       }
     });
 
-    async function handleJoinRoom(socket) {
+    function handleJoinRoom(socket) {
       socket.on("joinRoom", async ({ username, roomname }) => {
-        const roomExists = checkRoom(roomname);
+        const roomExists = await checkRoom(roomname);
 
-        if ((await roomExists) == true) {
+        if (roomExists) {
           try {
             console.log("La sala existe");
 
-            // Crea un usuario
             const user = userJoin(socket.id, username, roomname);
             socket.join(roomname);
 
-            // Envia la lista de usuarios y la sala
             const roomUsers = getRoomUsers(roomname);
             io.to(roomname).emit("roomUsers", {
               room: roomname,
               users: roomUsers,
             });
 
-            // Obtiene los mensajes de la sala
             await getMessages(io, user);
           } catch (error) {
             console.error("Error al obtener los mensajes:", error);
@@ -66,36 +63,17 @@ module.exports = {
       });
     }
 
-    async function handleChat(socket) {
+    function handleChat(socket) {
       socket.on("chat", async (message) => {
         console.log(message);
         const user = getCurrentUser(socket.id);
         console.log(user);
+
         if (user && user.room) {
           console.log("Subiendo mensaje");
+
           try {
-            // Guarda el mensaje en Strapi (base de datos sqlite)
-            fetch("http://127.0.0.1:1337/api/messages", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                data: {
-                  message: message,
-                  room: user.room,
-                  user: user.username,
-                },
-              }),
-            })
-              .then((response) => response.json())
-              .then((data) => {
-                console.log(data);
-                sendMessage(io, user, message);
-              })
-              .catch((error) => {
-                console.error("Error:", error);
-              });
+            await saveMessageToStrapi(io, user, message);
           } catch (error) {
             console.error("Error al guardar el mensaje en Strapi:", error);
           }
@@ -133,24 +111,52 @@ module.exports = {
       users[id] = user;
       return user;
     }
+
     async function checkRoom(roomname) {
+      console.log(roomname);
       const entry = await strapi.query("api::message.message").findOne({
         room: roomname,
       });
-
-      if (entry.room == roomname) return true;
+      console.log(entry);
+      if (entry.room === roomname)  return true;
     }
 
     function getCurrentUser(id) {
       return users[id];
     }
+
     async function getMessages(io, user) {
-      const messageData = await strapi.query("api::message.message").findMany({
+      const messageData = await strapi.query("message.message").findMany({
         room: user.room,
       });
+      console.log(messageData);
       io.to(user.room).emit("getChat", {
         messageData,
       });
+    }
+
+    async function saveMessageToStrapi(io, user, message) {
+      try {
+        const response = await fetch("http://127.0.0.1:1337/api/messages", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            data: {
+              message: message,
+              room: user.room,
+              user: user.username,
+            },
+          }),
+        });
+        if (response.status === 200) {
+          sendMessage(io, user, message);
+        }
+        
+      } catch (error) {
+        console.error("Error:", error);
+      }
     }
 
     function sendMessage(io, user, message) {
@@ -160,6 +166,7 @@ module.exports = {
         message: message,
       });
     }
+
     function userLeave(id) {
       if (users[id]) {
         const user = users[id];

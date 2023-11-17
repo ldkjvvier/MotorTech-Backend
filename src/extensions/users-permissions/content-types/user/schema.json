@@ -85,10 +85,7 @@
       "multiple": false,
       "required": false,
       "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
+        "images"
       ]
     },
     "lastname": {
@@ -97,6 +94,26 @@
       "required": true,
       "maxLength": 20,
       "default": "undefined"
+    },
+    "direccion": {
+      "type": "string",
+      "minLength": 5,
+      "maxLength": 20,
+      "required": true
+    },
+    "nacimiento": {
+      "type": "date",
+      "required": true
+    },
+    "genero": {
+      "type": "string",
+      "required": true
+    },
+    "telefono": {
+      "type": "string",
+      "required": true,
+      "maxLength": 9,
+      "minLength": 8
     }
   }
 }
