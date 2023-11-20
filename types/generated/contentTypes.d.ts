@@ -633,12 +633,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
     draftAndPublish: false;
   };
   attributes: {
-    username: Attribute.String &
-      Attribute.Required &
-      Attribute.Unique &
-      Attribute.SetMinMaxLength<{
-        minLength: 3;
-      }>;
     email: Attribute.Email &
       Attribute.Required &
       Attribute.SetMinMaxLength<{
@@ -659,6 +653,12 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'manyToOne',
       'plugin::users-permissions.role'
     >;
+    username: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 3;
+        maxLength: 20;
+      }>;
     vehiculos: Attribute.Relation<
       'plugin::users-permissions.user',
       'oneToMany',
@@ -695,6 +695,12 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       Attribute.SetMinMaxLength<{
         minLength: 8;
         maxLength: 9;
+      }>;
+    name: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 3;
+        maxLength: 20;
       }>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -792,6 +798,7 @@ export interface ApiMessageMessage extends Schema.CollectionType {
         minLength: 1;
         maxLength: 10;
       }>;
+    email: Attribute.Email & Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

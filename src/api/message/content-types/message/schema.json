@@ -23,6 +23,10 @@
       "required": true,
       "maxLength": 10,
       "minLength": 1
+    },
+    "email": {
+      "type": "email",
+      "required": true
     }
   }
 }

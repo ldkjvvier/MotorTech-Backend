@@ -41,7 +41,6 @@ module.exports = {
 
             const user = userJoin(socket.id, username, roomname);
             socket.join(roomname);
-
             const roomUsers = getRoomUsers(roomname);
             io.to(roomname).emit("roomUsers", {
               room: roomname,
@@ -54,26 +53,17 @@ module.exports = {
           }
         } else {
           console.log("La sala no existe");
-          socket.emit("message", {
-            userId: socket.id,
-            username: "Admin",
-            message: `La sala ${roomname} no existe`,
-          });
         }
       });
     }
 
     function handleChat(socket) {
-      socket.on("chat", async (message) => {
-        console.log(message);
+      socket.on("chat", async (message, email) => {
         const user = getCurrentUser(socket.id);
-        console.log(user);
 
         if (user && user.room) {
-          console.log("Subiendo mensaje");
-
           try {
-            await saveMessageToStrapi(io, user, message);
+            await saveMessageToStrapi(io, user, message, email);
           } catch (error) {
             console.error("Error al guardar el mensaje en Strapi:", error);
           }
@@ -113,11 +103,9 @@ module.exports = {
     }
 
     async function checkRoom(roomname) {
-      console.log(roomname);
       const entry = await strapi.query("api::message.message").findOne({
         room: roomname,
       });
-      console.log(entry);
       if (entry.room === roomname)  return true;
     }
 
@@ -126,16 +114,15 @@ module.exports = {
     }
 
     async function getMessages(io, user) {
-      const messageData = await strapi.query("message.message").findMany({
+      const messageData = await strapi.query("api::message.message").findMany({
         room: user.room,
       });
-      console.log(messageData);
       io.to(user.room).emit("getChat", {
         messageData,
       });
     }
 
-    async function saveMessageToStrapi(io, user, message) {
+    async function saveMessageToStrapi(io, user, message, email) {
       try {
         const response = await fetch("http://127.0.0.1:1337/api/messages", {
           method: "POST",
@@ -147,11 +134,13 @@ module.exports = {
               message: message,
               room: user.room,
               user: user.username,
+              email: email,
             },
           }),
         });
         if (response.status === 200) {
           sendMessage(io, user, message);
+          console.log('Mensaje guardado correctamente');
         }
         
       } catch (error) {
