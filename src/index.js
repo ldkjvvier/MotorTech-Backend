@@ -32,14 +32,14 @@ module.exports = {
     });
 
     function handleJoinRoom(socket) {
-      socket.on("joinRoom", async ({ username, roomname }) => {
+      socket.on("joinRoom", async ({ name, roomname }) => {
         const roomExists = await checkRoom(roomname);
 
         if (roomExists) {
           try {
             console.log("La sala existe");
 
-            const user = userJoin(socket.id, username, roomname);
+            const user = userJoin(socket.id, name, roomname);
             socket.join(roomname);
             const roomUsers = getRoomUsers(roomname);
             io.to(roomname).emit("roomUsers", {
@@ -78,8 +78,8 @@ module.exports = {
         if (user && user.room) {
           io.to(user.room).emit("message", {
             userId: user.id,
-            username: user.username,
-            message: `${user.username} ha abandonado el chat`,
+            name: user.name,
+            message: `${user.name} ha abandonado el chat`,
           });
         }
       });
@@ -96,8 +96,8 @@ module.exports = {
       });
     }
 
-    function userJoin(id, username, room) {
-      const user = { id, username, room };
+    function userJoin(id, name, room) {
+      const user = { id, name, room };
       users[id] = user;
       return user;
     }
@@ -133,7 +133,7 @@ module.exports = {
             data: {
               message: message,
               room: user.room,
-              user: user.username,
+              user: user.name,
               email: email,
             },
           }),
@@ -151,7 +151,7 @@ module.exports = {
     function sendMessage(io, user, message) {
       io.to(user.room).emit("message", {
         userId: user.id,
-        username: user.username,
+        name: user.name,
         message: message,
       });
     }

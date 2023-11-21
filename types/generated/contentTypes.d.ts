@@ -682,15 +682,15 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
         maxLength: 20;
       }> &
       Attribute.DefaultTo<'undefined'>;
-    direccion: Attribute.String &
+    address: Attribute.String &
       Attribute.Required &
       Attribute.SetMinMaxLength<{
         minLength: 5;
-        maxLength: 20;
+        maxLength: 50;
       }>;
-    nacimiento: Attribute.Date & Attribute.Required;
-    genero: Attribute.String & Attribute.Required;
-    telefono: Attribute.String &
+    date: Attribute.Date & Attribute.Required;
+    gender: Attribute.String & Attribute.Required;
+    phone: Attribute.String &
       Attribute.Required &
       Attribute.SetMinMaxLength<{
         minLength: 8;
@@ -702,6 +702,7 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
         minLength: 3;
         maxLength: 20;
       }>;
+    Icon: Attribute.Media;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
