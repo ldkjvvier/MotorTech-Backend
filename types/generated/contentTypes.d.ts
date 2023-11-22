@@ -362,6 +362,45 @@ export interface AdminTransferTokenPermission extends Schema.CollectionType {
   };
 }
 
+export interface ApiMessageMessage extends Schema.CollectionType {
+  collectionName: 'messages';
+  info: {
+    singularName: 'message';
+    pluralName: 'messages';
+    displayName: 'Message';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    user: Attribute.String;
+    message: Attribute.RichText;
+    room: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 1;
+        maxLength: 10;
+      }>;
+    email: Attribute.Email & Attribute.Required;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::message.message',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::message.message',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface PluginUploadFile extends Schema.CollectionType {
   collectionName: 'files';
   info: {
@@ -659,21 +698,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
         minLength: 3;
         maxLength: 20;
       }>;
-    vehiculos: Attribute.Relation<
-      'plugin::users-permissions.user',
-      'oneToMany',
-      'api::vehiculo.vehiculo'
-    >;
-    mecanico: Attribute.Relation<
-      'plugin::users-permissions.user',
-      'oneToOne',
-      'api::mecanico.mecanico'
-    >;
-    reviews: Attribute.Relation<
-      'plugin::users-permissions.user',
-      'oneToMany',
-      'api::review.review'
-    >;
     Avatar: Attribute.Media;
     lastname: Attribute.String &
       Attribute.Required &
@@ -720,198 +744,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
 }
 
-export interface ApiMecanicoMecanico extends Schema.CollectionType {
-  collectionName: 'mecanicos';
-  info: {
-    singularName: 'mecanico';
-    pluralName: 'mecanicos';
-    displayName: 'mec\u00E1nico';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    Id_mecanico: Attribute.UID & Attribute.Required;
-    Email_mecanico: Attribute.Email;
-    Nombre: Attribute.Text &
-      Attribute.Required &
-      Attribute.SetMinMaxLength<{
-        maxLength: 20;
-      }>;
-    users_permissions_users: Attribute.Relation<
-      'api::mecanico.mecanico',
-      'oneToMany',
-      'plugin::users-permissions.user'
-    >;
-    InformeEntrada: Attribute.Text &
-      Attribute.Required &
-      Attribute.SetMinMaxLength<{
-        minLength: 1;
-        maxLength: 2000;
-      }>;
-    InformeSalida: Attribute.Text &
-      Attribute.Required &
-      Attribute.SetMinMaxLength<{
-        minLength: 1;
-        maxLength: 2000;
-      }>;
-    vehiculos: Attribute.Relation<
-      'api::mecanico.mecanico',
-      'oneToMany',
-      'api::vehiculo.vehiculo'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::mecanico.mecanico',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::mecanico.mecanico',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiMessageMessage extends Schema.CollectionType {
-  collectionName: 'messages';
-  info: {
-    singularName: 'message';
-    pluralName: 'messages';
-    displayName: 'Message';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    user: Attribute.String;
-    message: Attribute.RichText;
-    room: Attribute.String &
-      Attribute.Required &
-      Attribute.SetMinMaxLength<{
-        minLength: 1;
-        maxLength: 10;
-      }>;
-    email: Attribute.Email & Attribute.Required;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::message.message',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::message.message',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiReviewReview extends Schema.CollectionType {
-  collectionName: 'reviews';
-  info: {
-    singularName: 'review';
-    pluralName: 'reviews';
-    displayName: 'Review';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    Comentario: Attribute.Text &
-      Attribute.Required &
-      Attribute.SetMinMaxLength<{
-        minLength: 1;
-        maxLength: 1500;
-      }>;
-    Puntuacion: Attribute.Integer &
-      Attribute.Required &
-      Attribute.SetMinMax<{
-        min: 1;
-        max: 10;
-      }>;
-    Id_mecanico: Attribute.UID;
-    Id_usuario: Attribute.UID;
-    users_permissions_user: Attribute.Relation<
-      'api::review.review',
-      'oneToOne',
-      'plugin::users-permissions.user'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::review.review',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::review.review',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiVehiculoVehiculo extends Schema.CollectionType {
-  collectionName: 'vehiculos';
-  info: {
-    singularName: 'vehiculo';
-    pluralName: 'vehiculos';
-    displayName: 'Veh\u00EDculo';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    Id_vehiculo: Attribute.UID & Attribute.Required;
-    Marca: Attribute.String;
-    Modelo: Attribute.String;
-    Id_usuario: Attribute.UID;
-    Numero_placa: Attribute.Integer;
-    mecanico: Attribute.Relation<
-      'api::vehiculo.vehiculo',
-      'oneToOne',
-      'api::mecanico.mecanico'
-    >;
-    users_permissions_user: Attribute.Relation<
-      'api::vehiculo.vehiculo',
-      'oneToOne',
-      'plugin::users-permissions.user'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::vehiculo.vehiculo',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::vehiculo.vehiculo',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
 declare module '@strapi/types' {
   export module Shared {
     export interface ContentTypes {
@@ -922,16 +754,13 @@ declare module '@strapi/types' {
       'admin::api-token-permission': AdminApiTokenPermission;
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
+      'api::message.message': ApiMessageMessage;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::i18n.locale': PluginI18NLocale;
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
-      'api::mecanico.mecanico': ApiMecanicoMecanico;
-      'api::message.message': ApiMessageMessage;
-      'api::review.review': ApiReviewReview;
-      'api::vehiculo.vehiculo': ApiVehiculoVehiculo;
     }
   }
 }

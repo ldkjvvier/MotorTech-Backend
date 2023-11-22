@@ -65,21 +65,6 @@
       "required": true,
       "unique": false
     },
-    "vehiculos": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::vehiculo.vehiculo"
-    },
-    "mecanico": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::mecanico.mecanico"
-    },
-    "reviews": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::review.review"
-    },
     "Avatar": {
       "type": "media",
       "multiple": false,
