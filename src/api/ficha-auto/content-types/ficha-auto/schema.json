@@ -1,0 +1,53 @@
+{
+  "kind": "collectionType",
+  "collectionName": "ficha_autos",
+  "info": {
+    "singularName": "ficha-auto",
+    "pluralName": "ficha-autos",
+    "displayName": "FichaAuto",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Patente": {
+      "type": "text",
+      "required": true
+    },
+    "UIDusuario": {
+      "type": "uid",
+      "required": true
+    },
+    "UIDficha": {
+      "type": "uid",
+      "required": true
+    },
+    "Modelo": {
+      "type": "text",
+      "required": true
+    },
+    "UltimoChequeo": {
+      "type": "text",
+      "required": true
+    },
+    "ProblemaActual": {
+      "type": "text",
+      "required": true
+    },
+    "Color": {
+      "type": "text",
+      "required": true
+    },
+    "UIDvehiculo": {
+      "type": "uid",
+      "required": true
+    },
+    "vehiculo": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::vehiculo.vehiculo"
+    }
+  }
+}

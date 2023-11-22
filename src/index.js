@@ -1,5 +1,6 @@
 // socket-module.js
 const { Server } = require("socket.io");
+const { entries } = require("../config/middlewares");
 
 module.exports = {
   async register({ strapi }) {
@@ -26,6 +27,7 @@ module.exports = {
         handleChat(socket);
         handleDisconnect(socket);
         handleGetUsers(socket);
+        notification(socket);
       } catch (error) {
         console.error("Error al conectar con el socket:", error);
       }
@@ -106,7 +108,7 @@ module.exports = {
       const entry = await strapi.query("api::message.message").findOne({
         room: roomname,
       });
-      if (entry.room === roomname)  return true;
+      if (entry.room === roomname) return true;
     }
 
     function getCurrentUser(id) {
@@ -140,9 +142,8 @@ module.exports = {
         });
         if (response.status === 200) {
           sendMessage(io, user, message);
-          console.log('Mensaje guardado correctamente');
+          console.log("Mensaje guardado correctamente");
         }
-        
       } catch (error) {
         console.error("Error:", error);
       }
@@ -167,5 +168,39 @@ module.exports = {
     function getRoomUsers(room) {
       return Object.values(users).filter((user) => user.room === room);
     }
+
+
+    /* SISTEMA DE NOTIFICACIONES */
+
+    const notifications = {};
+
+    
+    async function notification(socket) {
+      socket.on("receiveNotification", async (userId) => {
+        // Obtener id del usuario
+        const id = getCurrentUser(socket.id);
+        // Obtener notificaciones del usuario
+        const notification = await getNotification(userId);
+        // Enviar notificaciones al usuario
+        io.to(id).emit("getNotification", {
+          notification,
+        });
+      });
+    }
+
+    async function getNotification(userId) {
+      const entry = await strapi
+        .query("api::notification.notification")
+        .findMany({
+          receiver: userId,
+        });
+      console.log(entry);
+      return entry;
+    }
+    
   },
+
+
+
+
 };

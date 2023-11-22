@@ -106,12 +106,46 @@
       "maxLength": 20,
       "minLength": 3
     },
-    "Icon": {
-      "allowedTypes": [
-        "images"
-      ],
-      "type": "media",
-      "multiple": false
+    "ficha_autos": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::ficha-auto.ficha-auto"
+    },
+    "calificacions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::calificacion.calificacion"
+    },
+    "historial_usuario": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::historial-usuario.historial-usuario"
+    },
+    "pago_servicios": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::medio-de-pago.medio-de-pago"
+    },
+    "reclamos": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::reclamo.reclamo"
+    },
+    "vehiculos": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::vehiculo.vehiculo"
+    },
+    "horarios_atencions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::horarios-atencion.horarios-atencion"
+    },
+    "notification": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::notification.notification",
+      "mappedBy": "sender"
     }
   }
 }

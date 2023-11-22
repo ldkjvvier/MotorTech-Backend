@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "medio_de_pagos",
+  "info": {
+    "singularName": "medio-de-pago",
+    "pluralName": "medio-de-pagos",
+    "displayName": "PagoServicio",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "UIDpago": {
+      "type": "uid",
+      "required": true
+    },
+    "UIDusuario": {
+      "type": "uid",
+      "required": true
+    },
+    "MontoTotal": {
+      "type": "text",
+      "required": true
+    },
+    "Mediodepago": {
+      "type": "text",
+      "required": true
+    },
+    "admin_user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "admin::user"
+    }
+  }
+}

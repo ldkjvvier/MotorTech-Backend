@@ -362,45 +362,6 @@ export interface AdminTransferTokenPermission extends Schema.CollectionType {
   };
 }
 
-export interface ApiMessageMessage extends Schema.CollectionType {
-  collectionName: 'messages';
-  info: {
-    singularName: 'message';
-    pluralName: 'messages';
-    displayName: 'Message';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    user: Attribute.String;
-    message: Attribute.RichText;
-    room: Attribute.String &
-      Attribute.Required &
-      Attribute.SetMinMaxLength<{
-        minLength: 1;
-        maxLength: 10;
-      }>;
-    email: Attribute.Email & Attribute.Required;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::message.message',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::message.message',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
 export interface PluginUploadFile extends Schema.CollectionType {
   collectionName: 'files';
   info: {
@@ -726,7 +687,46 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
         minLength: 3;
         maxLength: 20;
       }>;
-    Icon: Attribute.Media;
+    ficha_autos: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::ficha-auto.ficha-auto'
+    >;
+    calificacions: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::calificacion.calificacion'
+    >;
+    historial_usuario: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToOne',
+      'api::historial-usuario.historial-usuario'
+    >;
+    pago_servicios: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::medio-de-pago.medio-de-pago'
+    >;
+    reclamos: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::reclamo.reclamo'
+    >;
+    vehiculos: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::vehiculo.vehiculo'
+    >;
+    horarios_atencions: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::horarios-atencion.horarios-atencion'
+    >;
+    notification: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToOne',
+      'api::notification.notification'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -744,6 +744,396 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
 }
 
+export interface ApiCalificacionCalificacion extends Schema.CollectionType {
+  collectionName: 'calificacions';
+  info: {
+    singularName: 'calificacion';
+    pluralName: 'calificacions';
+    displayName: 'Calificacion';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    UIDcalificacion: Attribute.UID & Attribute.Required;
+    UIDusuario: Attribute.UID & Attribute.Required;
+    Puntuacion: Attribute.Text & Attribute.Required;
+    Comentario: Attribute.Text & Attribute.Required;
+    FechaCalificacion: Attribute.DateTime & Attribute.Required;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::calificacion.calificacion',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::calificacion.calificacion',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiFichaAutoFichaAuto extends Schema.CollectionType {
+  collectionName: 'ficha_autos';
+  info: {
+    singularName: 'ficha-auto';
+    pluralName: 'ficha-autos';
+    displayName: 'FichaAuto';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    Patente: Attribute.Text & Attribute.Required;
+    UIDusuario: Attribute.UID & Attribute.Required;
+    UIDficha: Attribute.UID & Attribute.Required;
+    Modelo: Attribute.Text & Attribute.Required;
+    UltimoChequeo: Attribute.Text & Attribute.Required;
+    ProblemaActual: Attribute.Text & Attribute.Required;
+    Color: Attribute.Text & Attribute.Required;
+    UIDvehiculo: Attribute.UID & Attribute.Required;
+    vehiculo: Attribute.Relation<
+      'api::ficha-auto.ficha-auto',
+      'oneToOne',
+      'api::vehiculo.vehiculo'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::ficha-auto.ficha-auto',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::ficha-auto.ficha-auto',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiHistorialUsuarioHistorialUsuario
+  extends Schema.CollectionType {
+  collectionName: 'historial_usuarios';
+  info: {
+    singularName: 'historial-usuario';
+    pluralName: 'historial-usuarios';
+    displayName: 'HistorialUsuario';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    UIDusuario: Attribute.UID & Attribute.Required;
+    ChatsIniciados: Attribute.Text & Attribute.Required;
+    CalificacionesRealizadas: Attribute.Text & Attribute.Required;
+    HorasAgendadas: Attribute.DateTime;
+    AutosReparados: Attribute.Text & Attribute.Required;
+    PagosRealizados: Attribute.Text & Attribute.Required;
+    admin_user: Attribute.Relation<
+      'api::historial-usuario.historial-usuario',
+      'oneToOne',
+      'admin::user'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::historial-usuario.historial-usuario',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::historial-usuario.historial-usuario',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiHorariosAtencionHorariosAtencion
+  extends Schema.CollectionType {
+  collectionName: 'horarios_atencions';
+  info: {
+    singularName: 'horarios-atencion';
+    pluralName: 'horarios-atencions';
+    displayName: 'HorariosAtencion';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    UIDhorario: Attribute.UID;
+    UIDmecanico: Attribute.UID & Attribute.Required;
+    FechaAtencion: Attribute.Date & Attribute.Required;
+    HoraInicio: Attribute.Time;
+    HoraFinal: Attribute.Time & Attribute.Required;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::horarios-atencion.horarios-atencion',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::horarios-atencion.horarios-atencion',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiMedioDePagoMedioDePago extends Schema.CollectionType {
+  collectionName: 'medio_de_pagos';
+  info: {
+    singularName: 'medio-de-pago';
+    pluralName: 'medio-de-pagos';
+    displayName: 'PagoServicio';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    UIDpago: Attribute.UID & Attribute.Required;
+    UIDusuario: Attribute.UID & Attribute.Required;
+    MontoTotal: Attribute.Text & Attribute.Required;
+    Mediodepago: Attribute.Text & Attribute.Required;
+    admin_user: Attribute.Relation<
+      'api::medio-de-pago.medio-de-pago',
+      'oneToOne',
+      'admin::user'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::medio-de-pago.medio-de-pago',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::medio-de-pago.medio-de-pago',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiMessageMessage extends Schema.CollectionType {
+  collectionName: 'messages';
+  info: {
+    singularName: 'message';
+    pluralName: 'messages';
+    displayName: 'Message';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    user: Attribute.String;
+    message: Attribute.RichText;
+    room: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 1;
+        maxLength: 10;
+      }>;
+    email: Attribute.Email & Attribute.Required;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::message.message',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::message.message',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiNotificationNotification extends Schema.CollectionType {
+  collectionName: 'notifications';
+  info: {
+    singularName: 'notification';
+    pluralName: 'notifications';
+    displayName: 'Notification';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    message: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 1;
+      }>;
+    receiver: Attribute.Relation<
+      'api::notification.notification',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    sender: Attribute.Relation<
+      'api::notification.notification',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::notification.notification',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::notification.notification',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiReclamoReclamo extends Schema.CollectionType {
+  collectionName: 'reclamos';
+  info: {
+    singularName: 'reclamo';
+    pluralName: 'reclamos';
+    displayName: 'Reclamo';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    UIDreclamo: Attribute.UID & Attribute.Required;
+    MotivoReclamo: Attribute.Text & Attribute.Required;
+    FechaReclamo: Attribute.DateTime & Attribute.Required;
+    admin_user: Attribute.Relation<
+      'api::reclamo.reclamo',
+      'oneToOne',
+      'admin::user'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::reclamo.reclamo',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::reclamo.reclamo',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiServicioServicio extends Schema.CollectionType {
+  collectionName: 'servicios';
+  info: {
+    singularName: 'servicio';
+    pluralName: 'servicios';
+    displayName: 'Servicio';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    TipoServicio: Attribute.Text & Attribute.Required;
+    UIDservicio: Attribute.UID & Attribute.Required;
+    Costo: Attribute.Text & Attribute.Required;
+    Descripcion: Attribute.Text & Attribute.Required;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::servicio.servicio',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::servicio.servicio',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiVehiculoVehiculo extends Schema.CollectionType {
+  collectionName: 'vehiculos';
+  info: {
+    singularName: 'vehiculo';
+    pluralName: 'vehiculos';
+    displayName: 'Vehiculo';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    UIDvehiculo: Attribute.UID;
+    UIDusuario: Attribute.UID & Attribute.Required;
+    Modelo: Attribute.Text & Attribute.Required;
+    Year: Attribute.Date;
+    Color: Attribute.Text & Attribute.Required;
+    Patente: Attribute.Text & Attribute.Required;
+    Marca: Attribute.Text & Attribute.Required;
+    ficha_auto: Attribute.Relation<
+      'api::vehiculo.vehiculo',
+      'oneToOne',
+      'api::ficha-auto.ficha-auto'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::vehiculo.vehiculo',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::vehiculo.vehiculo',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface ContentTypes {
@@ -754,13 +1144,22 @@ declare module '@strapi/types' {
       'admin::api-token-permission': AdminApiTokenPermission;
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
-      'api::message.message': ApiMessageMessage;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::i18n.locale': PluginI18NLocale;
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
+      'api::calificacion.calificacion': ApiCalificacionCalificacion;
+      'api::ficha-auto.ficha-auto': ApiFichaAutoFichaAuto;
+      'api::historial-usuario.historial-usuario': ApiHistorialUsuarioHistorialUsuario;
+      'api::horarios-atencion.horarios-atencion': ApiHorariosAtencionHorariosAtencion;
+      'api::medio-de-pago.medio-de-pago': ApiMedioDePagoMedioDePago;
+      'api::message.message': ApiMessageMessage;
+      'api::notification.notification': ApiNotificationNotification;
+      'api::reclamo.reclamo': ApiReclamoReclamo;
+      'api::servicio.servicio': ApiServicioServicio;
+      'api::vehiculo.vehiculo': ApiVehiculoVehiculo;
     }
   }
 }

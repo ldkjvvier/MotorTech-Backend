@@ -1,0 +1,34 @@
+{
+  "kind": "collectionType",
+  "collectionName": "horarios_atencions",
+  "info": {
+    "singularName": "horarios-atencion",
+    "pluralName": "horarios-atencions",
+    "displayName": "HorariosAtencion",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "UIDhorario": {
+      "type": "uid"
+    },
+    "UIDmecanico": {
+      "type": "uid",
+      "required": true
+    },
+    "FechaAtencion": {
+      "required": true,
+      "type": "date"
+    },
+    "HoraInicio": {
+      "type": "time"
+    },
+    "HoraFinal": {
+      "required": true,
+      "type": "time"
+    }
+  }
+}

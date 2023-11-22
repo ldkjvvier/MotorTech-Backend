@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "reclamos",
+  "info": {
+    "singularName": "reclamo",
+    "pluralName": "reclamos",
+    "displayName": "Reclamo",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "UIDreclamo": {
+      "type": "uid",
+      "required": true
+    },
+    "MotivoReclamo": {
+      "type": "text",
+      "required": true
+    },
+    "FechaReclamo": {
+      "type": "datetime",
+      "required": true
+    },
+    "admin_user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "admin::user"
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "kind": "collectionType",
+  "collectionName": "historial_usuarios",
+  "info": {
+    "singularName": "historial-usuario",
+    "pluralName": "historial-usuarios",
+    "displayName": "HistorialUsuario",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "UIDusuario": {
+      "type": "uid",
+      "required": true
+    },
+    "ChatsIniciados": {
+      "type": "text",
+      "required": true
+    },
+    "CalificacionesRealizadas": {
+      "type": "text",
+      "required": true
+    },
+    "HorasAgendadas": {
+      "type": "datetime"
+    },
+    "AutosReparados": {
+      "type": "text",
+      "required": true
+    },
+    "PagosRealizados": {
+      "type": "text",
+      "required": true
+    },
+    "admin_user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "admin::user"
+    }
+  }
+}

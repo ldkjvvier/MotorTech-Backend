@@ -1,0 +1,35 @@
+{
+  "kind": "collectionType",
+  "collectionName": "calificacions",
+  "info": {
+    "singularName": "calificacion",
+    "pluralName": "calificacions",
+    "displayName": "Calificacion"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "UIDcalificacion": {
+      "type": "uid",
+      "required": true
+    },
+    "UIDusuario": {
+      "type": "uid",
+      "required": true
+    },
+    "Puntuacion": {
+      "type": "text",
+      "required": true
+    },
+    "Comentario": {
+      "type": "text",
+      "required": true
+    },
+    "FechaCalificacion": {
+      "required": true,
+      "type": "datetime"
+    }
+  }
+}
